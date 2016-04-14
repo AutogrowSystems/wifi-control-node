@@ -111,6 +111,10 @@ module.exports =
         interface: null
       }
 
+  # not supported yet
+  findInterfaces: ->
+    return []
+
   #
   # For Windows, parse netsh to acquire networking interface data.
   #

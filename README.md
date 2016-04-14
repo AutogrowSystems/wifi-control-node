@@ -54,6 +54,7 @@ Synchronous
 * `WiFiControl.init( settings )`
 * `WiFiControl.configure( settings )`
 * `WiFiControl.findInterface( iface )`
+* `WiFiControl.findInterfaces()`
 * `WiFiControl.getIfaceState()`
 
 Asynchronous
@@ -99,6 +100,48 @@ key | Explanation
 `debug` | (optional, Bool) When `debug: true`,  will turn on verbose output to the server console.  When `debug: false` (default), only errors will be printed to the server console.
 `iface` | (optional, String) Can be used to manually specify a network interface to use, instead of relying on `WiFiControl.findInterface()` to automatically find it.  This could be useful if for any reason `WiFiControl.findInterface()` is not working, or you have multiple network cards.
 `connectionTimeout` | (optional, Int) WiFi connection using `WiFiControl.connectToAP` method takes place in 2 steps. The first is the OS-specific commands required to associate the wireless device with the WiFi network specified by `ap`.  The second is a confirmation phase, where we must wait for the connection to be confirmed (in case of i.e. bad password, unstable AP, banned MAC address, ...).  By default, we allow 5 seconds for this step (`connectionTimeout: 5000`). You can override this value here.
+
+## Find Wireless Interface
+Unless your wireless cards are frequently changing or being turned on or off, it should not be necessary to use this method often.
+
+When called with no argument, `WiFiControl.findInterface()` will attempt to automatically locate a valid wireless interface on the host machine.
+
+When supplied a string argument `interface`, that value will be used as the host machine's intended wireless interface.  Typical values for various operating systems are:
+
+OS | Typical Values
+---|---
+Linux | wlan0, wlan1, ...
+Windows | wlan
+MacOS | en0, en1, ...
+
+Example:
+```js
+  var resultsAutomatic = WiFiControl.findInterface();
+  var resultsManual = WiFiControl.findInterface( 'wlan2' );
+```
+
+Output:
+```js
+  resultsAutomatic = {
+    "success":  true,
+    "msg":  "Automatically located wireless interface wlan2.",
+    "interface":  "wlan2"
+  }
+  resultsManual = {
+    "success":  true,
+    "msg":  "Wireless interface manually set to wlan2.",
+    "interface":  "wlan2"
+  }
+```
+
+### Find all interfaces
+
+You can also get an array of all interfaces by running the following:
+
+```
+var interfaces = WiFiControl.findInterfaces();
+// => [ "wlan0", "wlan1" ]
+```
 
 ## Scan for Networks
 ```js
@@ -203,39 +246,6 @@ Parameter | Value and Meaning
 `ssid` | (string or null) The SSID of the network the wireless interface is currently connected to.  If not presently connected, will be `undefined`.
 `connection` | (string) Can take three values: "disconnected", "connecting", or "connected".  Describes the current state of the wireless interface association with the current AP.
 `power` | (bool) Will only be `false` if the specified wireless interface's driver or connection manager is disabled.
-
-## Find Wireless Interface
-Unless your wireless cards are frequently changing or being turned on or off, it should not be necessary to use this method often.
-
-When called with no argument, `WiFiControl.findInterface()` will attempt to automatically locate a valid wireless interface on the host machine.
-
-When supplied a string argument `interface`, that value will be used as the host machine's intended wireless interface.  Typical values for various operating systems are:
-
-OS | Typical Values
----|---
-Linux | wlan0, wlan1, ...
-Windows | wlan
-MacOS | en0, en1, ...
-
-Example:
-```js
-  var resultsAutomatic = WiFiControl.findInterface();
-  var resultsManual = WiFiControl.findInterface( 'wlan2' );
-```
-
-Output:
-```js
-  resultsAutomatic = {
-    "success":  true,
-    "msg":  "Automatically located wireless interface wlan2.",
-    "interface":  "wlan2"
-  }
-  resultsManual = {
-    "success":  true,
-    "msg":  "Wireless interface manually set to wlan2.",
-    "interface":  "wlan2"
-  }
-```
 
 # Notes
 This library has been tested on Ubuntu 15.04, MacOS Yosemite, and Windows 10.

@@ -37,6 +37,10 @@ module.exports =
         interface: null
       }
 
+  # not supported yet
+  findInterfaces: ->
+    return []
+
   #
   # For MacOS, parse `airport -I` to acquire networking interface data.
   #

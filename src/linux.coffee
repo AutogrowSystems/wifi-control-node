@@ -38,6 +38,10 @@ module.exports =
         interface: null
       }
 
+  findInterfaces: ->
+    lines = @execSync "nmcli device status |grep wifi |cut -d' ' -f1"
+    return lines.trim().split("\n")
+
   #
   # For Linux, parse nmcli to acquire networking interface data.
   #

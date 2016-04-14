@@ -129,6 +129,14 @@ module.exports =
       }
 
   #
+  # findInterface:  Search host machine to find an active
+  #                 WiFi card interface.
+  #
+  findInterfaces: () ->
+    interfaces = os_instructions.findInterfaces.call CXT
+    return interfaces
+
+  #
   # scanForWiFi:   Return a list of nearby WiFi access points by using the
   #                host machine's wireless interface.  For this, we are using
   #                the NPM package node-wifiscanner2 by Particle (aka Spark).
